@@ -128,8 +128,6 @@ Plots ATLAS data made using atlasHelp.photometry_prep()
 	snr = np.array(data['snr']).astype(float)
 	filter = np.array(data['filter']).astype(str)
 	
-	
-	
 	cyan=np.where(filter == 'c')
 	orange=np.where(filter == 'o')
 	mjd_cyan=mjd[cyan]
@@ -195,7 +193,6 @@ Imposes a signal-to-noise cut instead of the default 3 sigma cut on detections
 	for i in range(0,len(mjd)):
 		if ( ~np.isfinite( mag[i])):
 			pass
-			
 
 		elif (snr[i] >= snr_threshold) and (np.isfinite( mag[i])):
 			pass
@@ -204,8 +201,6 @@ Imposes a signal-to-noise cut instead of the default 3 sigma cut on detections
 			ndt[i] = mag[i]
 			mag[i] = np.nan
 			err[i] = np.nan
-
-    print('Je suis here!')
 
 	data['mag'] = pd.Series(mjd, index = data.index)
 	data['mag'] = pd.Series(mag, index = data.index)
@@ -217,108 +212,6 @@ Imposes a signal-to-noise cut instead of the default 3 sigma cut on detections
 	return data
 
 # ========================================================================================
-
-def night_average(datasq):
-	
-	sys.exit('#####\nCode not tested. Please do not use just yet.\n#####)
-
-	return None
-
-# 	mjd = np.array(datasq['mjd'])
-# 	mag = np.array(datasq['mag'])
-# 	ndt = np.array(datasq['ndt']).astype(float)
-# 	err = np.array(datasq['magerr'])
-# 	snr = np.array(datasq['snr'])
-# 	filter = np.array(datasq['filter'])
-# 
-# 	round_mjd = np.floor( list( mjd))
-# 	unique_mjd = np.array( list( dict.fromkeys(round_mjd)))
-# 
-# 	avg_mjd = np.zeros(len(unique_mjd))
-# 	avg_mag = np.zeros(len(unique_mjd))
-# 	avg_err = np.zeros(len(unique_mjd))
-# 	stddev = np.zeros(len(unique_mjd))
-# 	avg_filter = np.empty_like(avg_mjd, dtype=str)
-# 
-# 	for i in range(0,len(unique_mjd)):
-# 
-# 		ind=np.where( np.equal( round_mjd, unique_mjd[i]) )
-# 		dummy_mjd = mjd[ind]
-# 		dummy_mag = mag[ind]
-# 		dummy_err = err[ind]
-# 		dummy_filter = filter[ind]
-# 	
-# 		if np.any(dummy_mag < 0.0) and not np.all(dummy_mag < 0.0):
-# 			dummy_mag = dummy_mag[np.where( dummy_mag > 0.0)]
-# 		
-# 		avg_mjd[i] = np.median(dummy_mjd)
-# 		avg_mag[i] = np.mean(dummy_mag)
-# 		avg_filter[i] = dummy_filter[0]
-# 		
-# 		if len(dummy_mag) == 1:
-# 		
-# 			stddev[i] = dummy_err
-# 			
-# 		else:
-# 		
-# 			stddev[i] = np.std(dummy_mag)
-# 
-# # =============================
-# 
-# 	zeropoints = [21.06916566, 21.60144232]
-# 
-# 	avg_ndt = np.full(len(unique_mjd), np.nan)
-# 	stddev_ndt = np.zeros(len(unique_mjd))
-# 
-# 	for i in range(0,len(unique_mjd)):
-# 		
-# 		ind = np.where( np.logical_and( np.equal( round_mjd, unique_mjd[i]), np.isfinite(ndt) ) )
-# 		dummy_ndt = np.array(ndt[ind], dtype=float)
-# # 		dummy_mag = mag[ind]
-# 		dummy_filter = filter[ind]
-# 
-# 		dummy_ndt = dummy_ndt[ np.isfinite(dummy_ndt) ]
-# 		
-# # 		print(unique_mjd[i])
-# # 		print(avg_mjd[i])
-# # 		print(dummy_ndt)
-# # 		print(dummy_filter)
-# # 		print('\n')
-# 		
-# # 		if unique_mjd[i] == 57653.0:
-# 		
-# 		if np.all(dummy_filter) == 'c':
-# 			
-# 			dummy_flux = 10**(-(dummy_ndt + 48.6 + zeropoints[0])/2.5)
-# 			avg_flux = np.mean( dummy_flux)
-# 			avg_ndt[i] = -2.5*np.log10( avg_flux) - 48.6 - zeropoints[0]
-# # 			stddev_ndt[i] = -2.5*np.log10( np.std(avg_flux)) - 48.6 - zeropoints[0] 
-# 
-# 
-# 		elif np.all(dummy_filter) == 'o':
-# 			
-# 			dummy_flux = 10**(-(dummy_ndt + 48.6 + zeropoints[1])/2.5)
-# 			avg_flux = np.mean( dummy_flux)
-# 			avg_ndt[i] = -2.5*np.log10( avg_flux) - 48.6 - zeropoints[1]
-# # 			stddev_ndt[i] = -2.5*np.log10( np.std(avg_flux)) - 48.6 - zeropoints[1] 
-# 
-# 
-# 	snr = np.full_like(avg_mjd, 5.0)
-# 	
-# # 	avg_mjd, avg_mag, avg_ndt, stddev, snr, avg_filter = zip( *sorted( zip( avg_mjd, avg_mag, avg_ndt, stddev, snr, avg_filter)))
-# 
-# 	datasq = pd.DataFrame({'mjd': avg_mjd, 'mag': avg_mag, 'ndt': avg_ndt, 'magerr': stddev, 'snr': snr, 'filter': avg_filter})
-# 
-# # 	datasq['mjd'] = pd.Series(avg_mjd, index = datasq.index)
-# # 	datasq['mag'] = pd.Series(avg_mag, index = datasq.index)
-# # 	datasq['ndt'] = pd.Series(avg_ndt, index = datasq.index)
-# # 	datasq['magerr'] = pd.Series(stddev, index = datasq.index)
-# # 	datasq['snr'] = pd.Series(snr, index = datasq.index)
-# # 	datasq['filter'] = pd.Series(avg_filter, index = datasq.index)
-# 
-# 	return datasq
-
-
 
 
 
